@@ -1,0 +1,85 @@
+From f2bdc709ae3cec649d3b77171bf836b72d31d4ae Mon Sep 17 00:00:00 2001
+From: Sumit Pundir <pundirsumit11@gmail.com>
+Date: Tue, 18 Dec 2018 17:32:37 +0530
+Subject: [PATCH] fix build errors
+
+---
+ power/power-8937.c | 12 ------------
+ power/power.c      | 12 ------------
+ 2 files changed, 24 deletions(-)
+
+diff --git a/power/power-8937.c b/power/power-8937.c
+index f0667a0..f81d9ce 100644
+--- a/power/power-8937.c
++++ b/power/power-8937.c
+@@ -152,11 +152,6 @@ int power_hint_override(__unused struct power_module *module, power_hint_t hint,
+         SCHED_BOOST_ON_V3, 0x1,
+     };
+ 
+-    if (hint == POWER_HINT_SET_PROFILE) {
+-        set_power_profile(*(int32_t *)data);
+-        return HINT_HANDLED;
+-    }
+-
+     // Skip other hints in power save mode
+     if (current_power_profile == PROFILE_POWER_SAVE) {
+         return HINT_HANDLED;
+@@ -195,13 +190,6 @@ int power_hint_override(__unused struct power_module *module, power_hint_t hint,
+             interaction(duration, ARRAY_SIZE(resources_launch),
+                     resources_launch);
+             return HINT_HANDLED;
+-        case POWER_HINT_CPU_BOOST:
+-            duration = *(int32_t *)data / 1000;
+-            if (duration > 0) {
+-                interaction(duration, ARRAY_SIZE(resources_cpu_boost),
+-                        resources_cpu_boost);
+-            }
+-            return HINT_HANDLED;
+         case POWER_HINT_VIDEO_ENCODE:
+             process_video_encode_hint(data);
+             return HINT_HANDLED;
+diff --git a/power/power.c b/power/power.c
+index 3ad2f66..c3b374d 100644
+--- a/power/power.c
++++ b/power/power.c
+@@ -196,8 +196,6 @@ static void power_hint(__attribute__((unused)) struct power_module *module, powe
+     switch(hint) {
+         case POWER_HINT_VSYNC:
+         case POWER_HINT_INTERACTION:
+-        case POWER_HINT_CPU_BOOST:
+-        case POWER_HINT_SET_PROFILE:
+         case POWER_HINT_LOW_POWER:
+         break;
+         case POWER_HINT_VIDEO_ENCODE:
+@@ -451,14 +449,6 @@ void set_feature(struct power_module *module, feature_t feature, int state)
+     set_device_specific_feature(module, feature, state);
+ }
+ 
+-int get_feature(struct power_module *module __unused, feature_t feature)
+-{
+-    if (feature == POWER_FEATURE_SUPPORTED_PROFILES) {
+-        return get_number_of_profiles();
+-    }
+-    return -1;
+-}
+-
+ static int power_open(const hw_module_t* module, const char* name,
+                     hw_device_t** device)
+ {
+@@ -479,7 +469,6 @@ static int power_open(const hw_module_t* module, const char* name,
+             dev->powerHint = power_hint;
+             dev->setInteractive = set_interactive;
+             dev->setFeature = set_feature;
+-            dev->getFeature = get_feature;
+             dev->get_number_of_platform_modes = NULL;
+             dev->get_platform_low_power_stats = NULL;
+             dev->get_voter_list = NULL;
+@@ -514,5 +503,4 @@ struct power_module HAL_MODULE_INFO_SYM = {
+     .powerHint = power_hint,
+     .setInteractive = set_interactive,
+     .setFeature = set_feature,
+-    .getFeature = get_feature
+ };
+-- 
+2.17.1
+

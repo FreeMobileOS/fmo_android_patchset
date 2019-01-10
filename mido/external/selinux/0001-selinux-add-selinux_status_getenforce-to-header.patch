@@ -1,0 +1,27 @@
+From ff990769c0c120507a85aca86f9b2bc53bc86bd8 Mon Sep 17 00:00:00 2001
+From: Sumit Pundir <pundirsumit11@gmail.com>
+Date: Tue, 18 Dec 2018 17:43:33 +0530
+Subject: [PATCH] selinux: add selinux_status_getenforce to header
+
+Change-Id: Ice712e9dda733947bc8046ce62ae0a82875bd981
+---
+ libselinux/include/selinux/selinux.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/libselinux/include/selinux/selinux.h b/libselinux/include/selinux/selinux.h
+index 01201ee..00359ed 100644
+--- a/libselinux/include/selinux/selinux.h
++++ b/libselinux/include/selinux/selinux.h
+@@ -13,6 +13,9 @@ extern int is_selinux_enabled(void);
+ /* Return 1 if we are running on a SELinux MLS kernel, or 0 otherwise. */
+ extern int is_selinux_mls_enabled(void);
+ 
++/* Return 1 if we are running on a enforced, or 0 if not or -1 if we get an error. */
++extern int selinux_status_getenforce(void);
++
+ /* No longer used; here for compatibility with legacy callers. */
+ typedef char *security_context_t;
+ 
+-- 
+2.17.1
+

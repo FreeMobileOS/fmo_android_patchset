@@ -1,0 +1,28 @@
+From fa616167663f605ebf06da48b32e9fa07e763e0e Mon Sep 17 00:00:00 2001
+From: Sumit Pundir <pundirsumit11@gmail.com>
+Date: Thu, 13 Dec 2018 16:22:36 +0530
+Subject: [PATCH] Revert "librmnetctl: Use generated kernel headers"
+
+This reverts commit 86c525ee86e2adbbaacb0d0019791d2b52e96c3a.
+---
+ rmnetctl/src/Android.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/rmnetctl/src/Android.mk b/rmnetctl/src/Android.mk
+index 0936fb1..f992aed 100644
+--- a/rmnetctl/src/Android.mk
++++ b/rmnetctl/src/Android.mk
+@@ -9,8 +9,8 @@ LOCAL_CFLAGS := -Wall -Werror
+ 
+ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../inc
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)
+-
+-LOCAL_HEADER_LIBRARIES := generated_kernel_headers
++LOCAL_C_INCLUDES += $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include
++LOCAL_ADDITIONAL_DEPENDENCIES := $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
+ 
+ LOCAL_CLANG := true
+ LOCAL_MODULE := librmnetctl
+-- 
+2.17.1
+
