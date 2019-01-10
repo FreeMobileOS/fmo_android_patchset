@@ -1,0 +1,34 @@
+From 3f125f3465ad008b9308f69a51f9737d7f09fbda Mon Sep 17 00:00:00 2001
+From: Satish Patel <tosatishpatel@gmail.com>
+Date: Thu, 29 Nov 2018 08:04:42 +0530
+Subject: [PATCH] Fix build error: Add parceable for VolumeShaper
+
+Change-Id: Ia35ea1d3fb59cbcd63042457febf8d42f0e63308
+Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
+---
+ include/media/VolumeShaper.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/include/media/VolumeShaper.h b/include/media/VolumeShaper.h
+index a3aaece..ece3f7b 100644
+--- a/include/media/VolumeShaper.h
++++ b/include/media/VolumeShaper.h
+@@ -126,6 +126,7 @@ public:
+         Configuration()
+             : Interpolator<S, T>()
+             , RefBase()
++            , Parcelable()
+             , mType(TYPE_SCALE)
+             , mId(-1)
+             , mOptionFlags(OPTION_FLAG_NONE)
+@@ -135,6 +136,7 @@ public:
+         explicit Configuration(const Configuration &configuration)
+             : Interpolator<S, T>(*static_cast<const Interpolator<S, T> *>(&configuration))
+             , RefBase()
++            , Parcelable()
+             , mType(configuration.mType)
+             , mId(configuration.mId)
+             , mOptionFlags(configuration.mOptionFlags)
+-- 
+2.7.4
+

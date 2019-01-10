@@ -1,0 +1,64 @@
+From 19a1498c16b27eeace7c5bda57bfb885f4d47c38 Mon Sep 17 00:00:00 2001
+From: Satish Patel <tosatishpatel@gmail.com>
+Date: Thu, 29 Nov 2018 16:50:04 +0530
+Subject: [PATCH] adbd: Disable "adb root" by system property
+
+Author: Steve Kondik <shade@chemlab.org>
+Date:   Sat Jan 14 17:04:22 2012 -0800
+
+    adbd: Disable "adb root" by system property (2/3)
+
+     * Require persist.sys.root_access=1 on non-eng debuggable builds
+
+    Change-Id: Iedab030e81ffb525fed64aed80cf0014f3e07073
+
+Author: Steve Kondik <steve@cyngn.com>
+Date:   Sun Oct 18 02:07:16 2015 -0700
+
+    adb: Fix compilation issue
+
+    Change-Id: Ia3284d5b8e428474726f64231f8142cf2474b17f
+
+Author: Michael Bestas <mkbestas@lineageos.org>
+Date:   Thu Feb 1 17:04:45 2018 +0000
+Edit:   Adapt for O and rebrand prop
+
+Author: Bruno Martins <bgcngm@gmail.com>
+Date:   Sat Nov 17 15:30:45 2018 +0000
+Edit:   Remove useless Lineage prop check
+
+Change-Id: Ib880967a72296edfb05b80875fbe18136338a8c5
+
+ref#
+https://review.lineageos.org/c/LineageOS/android_system_core/+/223085
+
+Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
+---
+ adb/services.cpp | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/adb/services.cpp b/adb/services.cpp
+index 0b0c161..5b9378b 100644
+--- a/adb/services.cpp
++++ b/adb/services.cpp
+@@ -83,7 +83,16 @@ void restart_root_service(int fd, void *cookie) {
+             adb_close(fd);
+             return;
+         }
+-
++		int root_access = android::base::GetIntProperty("persist.sys.root_access", 0);
++		std::string build_type = android::base::GetProperty("ro.build.type", "");
++
++		if (build_type != "eng" && (root_access & 2) != 2) {
++			WriteFdExactly(fd,
++					"root access is disabled by system setting - "
++					"enable in Settings -> System -> Developer options\n");
++			adb_close(fd);
++			return;
++		}
+         android::base::SetProperty("service.adb.root", "1");
+         WriteFdExactly(fd, "restarting adbd as root\n");
+         adb_close(fd);
+-- 
+2.7.4
+
