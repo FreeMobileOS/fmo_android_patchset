@@ -1,0 +1,26 @@
+From 15e416031b835ee8a94f4ba394128555e9bc1318 Mon Sep 17 00:00:00 2001
+From: Daniel Micay <danielmicay@gmail.com>
+Date: Wed, 28 Nov 2018 01:08:00 -0500
+Subject: [PATCH 3/8] enable swipe up gesture by default
+
+Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
+---
+ core/res/res/values/config.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/core/res/res/values/config.xml b/core/res/res/values/config.xml
+index 0bc6c62814d..b377bb93ab5 100644
+--- a/core/res/res/values/config.xml
++++ b/core/res/res/values/config.xml
+@@ -3509,7 +3509,7 @@
+     <string name="config_managed_provisioning_package" translatable="false">com.android.managedprovisioning</string>
+ 
+     <!-- Whether or not swipe up gesture is enabled by default -->
+-    <bool name="config_swipe_up_gesture_default">false</bool>
++    <bool name="config_swipe_up_gesture_default">true</bool>
+ 
+     <!-- Whether or not swipe up gesture's opt-in setting is available on this device -->
+     <bool name="config_swipe_up_gesture_setting_available">true</bool>
+-- 
+2.17.1
+
