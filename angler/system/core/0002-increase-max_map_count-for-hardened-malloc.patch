@@ -1,0 +1,26 @@
+From cf60c285a0b32de115bafa698347fa322e4112e7 Mon Sep 17 00:00:00 2001
+From: Daniel Micay <danielmicay@gmail.com>
+Date: Thu, 13 Dec 2018 09:26:25 -0500
+Subject: [PATCH 2/2] increase max_map_count for hardened malloc
+
+Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
+---
+ rootdir/init.rc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/rootdir/init.rc b/rootdir/init.rc
+index b9464e7..2149abe 100644
+--- a/rootdir/init.rc
++++ b/rootdir/init.rc
+@@ -597,6 +597,8 @@ on boot
+     chown root system /sys/module/lowmemorykiller/parameters/minfree
+     chmod 0664 /sys/module/lowmemorykiller/parameters/minfree
+ 
++    write /proc/sys/vm/max_map_count 524240
++
+     # Tweak background writeout
+     write /proc/sys/vm/dirty_expire_centisecs 200
+     write /proc/sys/vm/dirty_background_ratio  5
+-- 
+2.7.4
+

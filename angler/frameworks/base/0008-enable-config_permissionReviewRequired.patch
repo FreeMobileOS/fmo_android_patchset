@@ -1,0 +1,28 @@
+From 9a08d904586200255accc9e48793a6fab199a6ee Mon Sep 17 00:00:00 2001
+From: Daniel Micay <danielmicay@gmail.com>
+Date: Fri, 14 Jul 2017 22:25:03 -0400
+Subject: [PATCH 8/8] enable config_permissionReviewRequired
+
+Enable permission review for apps targeting API level < 23.
+
+Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
+---
+ core/res/res/values/config.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/core/res/res/values/config.xml b/core/res/res/values/config.xml
+index 88b0ac5..3535ff7 100644
+--- a/core/res/res/values/config.xml
++++ b/core/res/res/values/config.xml
+@@ -3244,7 +3244,7 @@
+          with targetSdkVersion < 23, i.e apps using the old permission model.
+          If review is not required, permissions are reviewed before the app
+          is installed. -->
+-    <bool name="config_permissionReviewRequired">false</bool>
++    <bool name="config_permissionReviewRequired">true</bool>
+ 
+     <!-- Default value for android:focusableInTouchMode for some framework scrolling containers.
+          ListView/GridView are notably absent since this is their default anyway.
+-- 
+2.7.4
+

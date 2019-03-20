@@ -1,0 +1,26 @@
+From 294e8bee8c157c3419b70ac8a658933a407705a2 Mon Sep 17 00:00:00 2001
+From: Daniel Micay <danielmicay@gmail.com>
+Date: Wed, 28 Nov 2018 01:07:48 -0500
+Subject: [PATCH 2/8] make swipe up gesture available by default
+
+Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
+---
+ core/res/res/values/config.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/core/res/res/values/config.xml b/core/res/res/values/config.xml
+index a4d1425..0bc6c62 100644
+--- a/core/res/res/values/config.xml
++++ b/core/res/res/values/config.xml
+@@ -3512,7 +3512,7 @@
+     <bool name="config_swipe_up_gesture_default">false</bool>
+ 
+     <!-- Whether or not swipe up gesture's opt-in setting is available on this device -->
+-    <bool name="config_swipe_up_gesture_setting_available">false</bool>
++    <bool name="config_swipe_up_gesture_setting_available">true</bool>
+ 
+     <!-- Applications which are disabled unless matching a particular sku -->
+     <string-array name="config_disableApksUnlessMatchedSku_apk_list" translatable="false" />
+-- 
+2.7.4
+
