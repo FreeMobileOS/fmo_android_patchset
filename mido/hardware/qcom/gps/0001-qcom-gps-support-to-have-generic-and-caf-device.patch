@@ -1,0 +1,33 @@
+From b19a4edcf24208b1224c831a5ebced9747b7cee6 Mon Sep 17 00:00:00 2001
+From: Satish Patel <tosatishpatel@gmail.com>
+Date: Tue, 19 Mar 2019 14:43:19 +0530
+Subject: [PATCH] [qcom/gps]: support to have generic and caf device
+
+Allow further entry based on qcom-gps variable settings
+
+Change-Id: I8078956052eff5b9ed46c9372eec5383a366bb00
+Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
+---
+ Android.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/Android.mk b/Android.mk
+index e8db66e..5d0759d 100644
+--- a/Android.mk
++++ b/Android.mk
+@@ -1,3 +1,6 @@
++# add variable check
++ifeq ($(call my-dir),$(call project-path-for,qcom-gps))
++
+ #set TARGET_USES_HARDWARE_QCOM_GPS to false to disable this project.
+ 
+ ifeq ($(TARGET_USES_HARDWARE_QCOM_GPS),)
+@@ -47,3 +50,5 @@ ifeq ($(TARGET_USES_HARDWARE_QCOM_GPS),true)
+ 
+   endif #BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE
+ endif
++
++endif # variable check
+-- 
+2.17.1
+
