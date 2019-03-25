@@ -1,0 +1,34 @@
+From d98cbf833342a6e7b0366e4136a78b33cb7da981 Mon Sep 17 00:00:00 2001
+From: Satish Patel <tosatishpatel@gmail.com>
+Date: Mon, 25 Mar 2019 15:26:31 +0530
+Subject: [PATCH] Avoid lineage related dependencies
+
+Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
+---
+ Android.bp | 10 ----------
+ 1 file changed, 10 deletions(-)
+
+diff --git a/Android.bp b/Android.bp
+index ea6cbb0..2bcc8a0 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -16,16 +16,6 @@ cc_library_shared {
+     srcs: sourceFiles,
+     shared_libs: commonSharedLibraries,
+ 
+-    product_variables: {
+-        lineage: {
+-            should_skip_waiting_for_qsee: {
+-                cflags: ["-DSKIP_WAITING_FOR_QSEE"],
+-            },
+-            supports_legacy_hw_fde: {
+-                cflags: ["-DLEGACY_HW_DISK_ENCRYPTION"],
+-            },
+-        },
+-    },
+ 
+     owner: "qti",
+ }
+-- 
+2.7.4
+
