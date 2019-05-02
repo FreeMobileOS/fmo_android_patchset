@@ -1,0 +1,65 @@
+From 334637b9a7bda929f53647c0f990bfd83a2f1199 Mon Sep 17 00:00:00 2001
+From: Satish Patel <tosatishpatel@gmail.com>
+Date: Thu, 2 May 2019 12:30:27 +0530
+Subject: [PATCH] remove lineage dependency
+
+Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
+---
+ camera/device/1.0/default/Android.bp   |  8 --------
+ camera/provider/2.4/default/Android.bp | 16 ----------------
+ 2 files changed, 24 deletions(-)
+
+diff --git a/camera/device/1.0/default/Android.bp b/camera/device/1.0/default/Android.bp
+index adedfdc..4a7fc9c 100644
+--- a/camera/device/1.0/default/Android.bp
++++ b/camera/device/1.0/default/Android.bp
+@@ -29,14 +29,6 @@ cc_library_shared {
+     header_libs: [
+         "media_plugin_headers",
+     ],
+-    product_variables: {
+-        lineage: {
+-            uses_qti_camera_device: {
+-                cppflags: ["-DQTI_CAMERA_DEVICE"],
+-                shared_libs: ["vendor.qti.hardware.camera.device@1.0"],
+-            },
+-        },
+-    },
+     export_include_dirs: ["."]
+ }
+ 
+diff --git a/camera/provider/2.4/default/Android.bp b/camera/provider/2.4/default/Android.bp
+index f3de961..ae24d78 100644
+--- a/camera/provider/2.4/default/Android.bp
++++ b/camera/provider/2.4/default/Android.bp
+@@ -33,14 +33,6 @@ cc_library_shared {
+         "camera.device@3.4-impl_headers",
+         "camera.device@3.4-external-impl_headers"
+     ],
+-    product_variables: {
+-        lineage: {
+-            uses_qti_camera_device: {
+-                cppflags: ["-DQTI_CAMERA_DEVICE"],
+-                shared_libs: ["vendor.qti.hardware.camera.device@1.0"],
+-            },
+-        },
+-    },
+     static_libs: [
+         "android.hardware.camera.common@1.0-helper",
+     ],
+@@ -113,12 +105,4 @@ cc_binary {
+         "android.hardware.camera.provider@2.4",
+         "android.hardware.camera.common@1.0",
+     ],
+-    product_variables: {
+-        lineage: {
+-            uses_qti_camera_device: {
+-                cppflags: ["-DQTI_CAMERA_DEVICE"],
+-                shared_libs: ["vendor.qti.hardware.camera.device@1.0"],
+-            },
+-        },
+-    },
+ }
+-- 
+2.17.1
+
