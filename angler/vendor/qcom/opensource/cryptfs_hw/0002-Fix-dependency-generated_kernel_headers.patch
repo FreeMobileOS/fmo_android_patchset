@@ -1,0 +1,27 @@
+From 91195fd01d478f5d62887736072465f69c07106e Mon Sep 17 00:00:00 2001
+From: Satish Patel <tosatishpatel@gmail.com>
+Date: Thu, 2 May 2019 12:33:22 +0530
+Subject: [PATCH] Fix dependency : "generated_kernel_headers"
+
+Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
+---
+ Android.bp | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/Android.bp b/Android.bp
+index 2bcc8a0..a363c36 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -10,8 +10,7 @@ commonSharedLibraries = [
+ 
+ cc_library_shared {
+     name: "libcryptfs_hw",
+-    header_libs: ["generated_kernel_headers",
+-                  "libhardware_headers"],
++    header_libs: ["libhardware_headers"],
+     cflags: ["-DCONFIG_HW_DISK_ENCRYPTION"],
+     srcs: sourceFiles,
+     shared_libs: commonSharedLibraries,
+-- 
+2.17.1
+
