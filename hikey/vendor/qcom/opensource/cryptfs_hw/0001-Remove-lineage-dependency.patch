@@ -1,0 +1,38 @@
+From 7e245b0186b345e8342286098de744cef8997fd9 Mon Sep 17 00:00:00 2001
+From: Satish Patel <tosatishpatel@gmail.com>
+Date: Fri, 21 Jun 2019 16:46:52 +0530
+Subject: [PATCH] Remove lineage dependency
+
+Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
+---
+ Android.bp | 14 --------------
+ 1 file changed, 14 deletions(-)
+
+diff --git a/Android.bp b/Android.bp
+index 8bddd86..8aea8b6 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -16,20 +16,6 @@ cc_library_shared {
+     srcs: sourceFiles,
+     shared_libs: commonSharedLibraries,
+ 
+-    product_variables: {
+-        lineage: {
+-            should_skip_waiting_for_qsee: {
+-                cflags: ["-DSKIP_WAITING_FOR_QSEE"],
+-            },
+-            supports_legacy_hw_fde: {
+-                cflags: ["-DLEGACY_HW_DISK_ENCRYPTION"],
+-            },
+-            uses_metadata_as_fde_key: {
+-                cflags: ["-DUSE_METADATA_FOR_KEY"],
+-            },
+-        },
+-    },
+-
+     owner: "qti",
+ }
+ 
+-- 
+2.7.4
+

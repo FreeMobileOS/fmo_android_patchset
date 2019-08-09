@@ -1,0 +1,49 @@
+From 6870fe0e380b630cfd61be8818c82b8fc5fe8c15 Mon Sep 17 00:00:00 2001
+From: "Kevin F. Haggerty" <haggertk@lineageos.org>
+Date: Sat, 25 Aug 2018 20:23:19 -0600
+Subject: [PATCH] soong: Allow extension of valid gralloc 1.0 buffer usage bits
+
+* fw/native change I7f4174581e24e361577640b9263514a168ed482d
+  implemented validation of the buffer description info prior to
+  creating the descriptor. Some of our devices need to whitelist
+  additional usage bits to support camera functionality.
+* The TARGET_ADDITIONAL_GRALLOC_10_USAGE_BITS variable can contain
+  a singular roll-up value (e.g., 0x02000000U), a left-shifted bit
+  (e.g., (1 << 25)), a bitwise OR of these things, or essentially
+  anything that the compiler can choke down.
+
+Change-Id: I2127d33b03426b5e0f981aae837e07d82163fa17
+Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
+---
+ android/variable.go | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/android/variable.go b/android/variable.go
+index f4aaec7..a301ced 100644
+--- a/android/variable.go
++++ b/android/variable.go
+@@ -114,6 +114,11 @@ type variableProperties struct {
+ 			Static_libs  []string
+ 			Srcs         []string
+ 		}
++
++		Additional_gralloc_10_usage_bits struct {
++			Cppflags []string
++		}
++
+ 	} `android:"arch_variant"`
+ }
+ 
+@@ -230,6 +235,9 @@ type productVariables struct {
+ 	PgoAdditionalProfileDirs []string `json:",omitempty"`
+ 
+ 	VendorVars map[string]map[string]string `json:",omitempty"`
++
++	Additional_gralloc_10_usage_bits  *string `json:",omitempty"`
++
+ }
+ 
+ func boolPtr(v bool) *bool {
+-- 
+2.7.4
+

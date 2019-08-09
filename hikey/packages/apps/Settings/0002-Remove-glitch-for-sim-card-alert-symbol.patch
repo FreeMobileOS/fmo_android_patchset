@@ -1,0 +1,76 @@
+From cd5e7a470a3028ee53edbd29e870a4f131b81db8 Mon Sep 17 00:00:00 2001
+From: Satish Patel <tosatishpatel@gmail.com>
+Date: Tue, 30 Jul 2019 15:11:07 +0530
+Subject: [PATCH] Remove glitch for sim card alert symbol
+
+Change-Id: If2442bb80735637bb64ed631db4982f007eb6d54
+Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
+---
+ .../ic_sim_card_alert_white_48dp.png              | Bin 0 -> 516 bytes
+ .../ic_sim_card_alert_white_48dp.png              | Bin 0 -> 516 bytes
+ .../ic_sim_card_alert_white_48dp.png              | Bin 0 -> 516 bytes
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 res/drawable-ldrtl-xhdpi/ic_sim_card_alert_white_48dp.png
+ create mode 100644 res/drawable-nodpi/ic_sim_card_alert_white_48dp.png
+ create mode 100644 res/drawable-sw600dp-xhdpi/ic_sim_card_alert_white_48dp.png
+
+diff --git a/res/drawable-ldrtl-xhdpi/ic_sim_card_alert_white_48dp.png b/res/drawable-ldrtl-xhdpi/ic_sim_card_alert_white_48dp.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..6d983b726275ba2b23733b82cf8e55b8526c2209
+GIT binary patch
+literal 516
+zcmeAS@N?(olHy`uVBq!ia0vp^2_VeD0wg^q?%xcg6p}rHd>I(3)EF2VS{N990fib~
+zFff!FFfhDIU|_JC!N4G1FlSew4N!t9$=lt9;eUJonf*W>XMsm#F#`j)FbFd;%$g&?
+zz`$7J>EaktaqI2vgT99iM2>yb7Y*9Q#=PYX!*RY#hA;RuTy+k0zG)B;dK9$L&EiSn
+z35IRL)^!K|Kb5PuzrFFPMyAjH-DXTc!x<R*7}Reb%D%At+%5O*8J6oOKV5avDm(es
+z7s>in_qJs-6&*J>etnI3N=LrgExjwB)GjZsj!)^#EQxunsCW5yaBWLe{+aCe{-zny
+z5-Oi%>SwvJns55_vHRT-zDN3uJ38#;AE^9`X_)=vGeh5_^Nc&X=JOSZ*^55VtCKpA
+z_(!DS^pB4W%ReSF<~=^nD094@aYvtgvD}R6gbc2`?dCvVBLfBhSkc{^4Z+U-u>N~v
+z%zL+)P9OybDjPIGK@9>cSbwaWl^?<PV-?p99riDwj0dkBo<Ha9SE*lbR!8*iy7>E&
+zV8!L+t^eLTeSBQUl=XGZZLW{;B^>&SvsX-guwZk})03YCgzcZ2ubJDo>+;rHkGP+^
+n?wxmNvbyL2KOT_z^@1OmE%)-wJ*81J8N~N=^>bP0l+XkKXbj8L
+
+literal 0
+HcmV?d00001
+
+diff --git a/res/drawable-nodpi/ic_sim_card_alert_white_48dp.png b/res/drawable-nodpi/ic_sim_card_alert_white_48dp.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..6d983b726275ba2b23733b82cf8e55b8526c2209
+GIT binary patch
+literal 516
+zcmeAS@N?(olHy`uVBq!ia0vp^2_VeD0wg^q?%xcg6p}rHd>I(3)EF2VS{N990fib~
+zFff!FFfhDIU|_JC!N4G1FlSew4N!t9$=lt9;eUJonf*W>XMsm#F#`j)FbFd;%$g&?
+zz`$7J>EaktaqI2vgT99iM2>yb7Y*9Q#=PYX!*RY#hA;RuTy+k0zG)B;dK9$L&EiSn
+z35IRL)^!K|Kb5PuzrFFPMyAjH-DXTc!x<R*7}Reb%D%At+%5O*8J6oOKV5avDm(es
+z7s>in_qJs-6&*J>etnI3N=LrgExjwB)GjZsj!)^#EQxunsCW5yaBWLe{+aCe{-zny
+z5-Oi%>SwvJns55_vHRT-zDN3uJ38#;AE^9`X_)=vGeh5_^Nc&X=JOSZ*^55VtCKpA
+z_(!DS^pB4W%ReSF<~=^nD094@aYvtgvD}R6gbc2`?dCvVBLfBhSkc{^4Z+U-u>N~v
+z%zL+)P9OybDjPIGK@9>cSbwaWl^?<PV-?p99riDwj0dkBo<Ha9SE*lbR!8*iy7>E&
+zV8!L+t^eLTeSBQUl=XGZZLW{;B^>&SvsX-guwZk})03YCgzcZ2ubJDo>+;rHkGP+^
+n?wxmNvbyL2KOT_z^@1OmE%)-wJ*81J8N~N=^>bP0l+XkKXbj8L
+
+literal 0
+HcmV?d00001
+
+diff --git a/res/drawable-sw600dp-xhdpi/ic_sim_card_alert_white_48dp.png b/res/drawable-sw600dp-xhdpi/ic_sim_card_alert_white_48dp.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..6d983b726275ba2b23733b82cf8e55b8526c2209
+GIT binary patch
+literal 516
+zcmeAS@N?(olHy`uVBq!ia0vp^2_VeD0wg^q?%xcg6p}rHd>I(3)EF2VS{N990fib~
+zFff!FFfhDIU|_JC!N4G1FlSew4N!t9$=lt9;eUJonf*W>XMsm#F#`j)FbFd;%$g&?
+zz`$7J>EaktaqI2vgT99iM2>yb7Y*9Q#=PYX!*RY#hA;RuTy+k0zG)B;dK9$L&EiSn
+z35IRL)^!K|Kb5PuzrFFPMyAjH-DXTc!x<R*7}Reb%D%At+%5O*8J6oOKV5avDm(es
+z7s>in_qJs-6&*J>etnI3N=LrgExjwB)GjZsj!)^#EQxunsCW5yaBWLe{+aCe{-zny
+z5-Oi%>SwvJns55_vHRT-zDN3uJ38#;AE^9`X_)=vGeh5_^Nc&X=JOSZ*^55VtCKpA
+z_(!DS^pB4W%ReSF<~=^nD094@aYvtgvD}R6gbc2`?dCvVBLfBhSkc{^4Z+U-u>N~v
+z%zL+)P9OybDjPIGK@9>cSbwaWl^?<PV-?p99riDwj0dkBo<Ha9SE*lbR!8*iy7>E&
+zV8!L+t^eLTeSBQUl=XGZZLW{;B^>&SvsX-guwZk})03YCgzcZ2ubJDo>+;rHkGP+^
+n?wxmNvbyL2KOT_z^@1OmE%)-wJ*81J8N~N=^>bP0l+XkKXbj8L
+
+literal 0
+HcmV?d00001
+
+-- 
+2.17.1
+

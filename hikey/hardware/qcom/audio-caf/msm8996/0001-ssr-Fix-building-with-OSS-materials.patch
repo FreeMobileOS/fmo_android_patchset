@@ -1,0 +1,51 @@
+From a3b34399284d14cddc020cef6623614160f489ae Mon Sep 17 00:00:00 2001
+From: Ricardo Cerqueira <ricardo@cyngn.com>
+Date: Tue, 18 Dec 2018 17:54:14 +0530
+Subject: [PATCH] ssr: Fix building with OSS materials
+
+---
+ hal/Android.mk       |  3 +++
+ hal/audio_extn/ssr.c | 12 ++++++++++++
+ 2 files changed, 15 insertions(+)
+
+diff --git a/hal/Android.mk b/hal/Android.mk
+index fdba864..0c910fd 100644
+--- a/hal/Android.mk
++++ b/hal/Android.mk
+@@ -148,6 +148,9 @@ ifeq ($(strip $(AUDIO_FEATURE_ENABLED_CUSTOMSTEREO)),true)
+ endif
+ 
+ ifeq ($(strip $(AUDIO_FEATURE_ENABLED_SSR)),true)
++    ifeq ($(QCPATH),)
++        LOCAL_CFLAGS += -D_OSS
++    endif
+     LOCAL_CFLAGS += -DSSR_ENABLED
+     LOCAL_SRC_FILES += audio_extn/ssr.c
+     LOCAL_C_INCLUDES += $(TARGET_OUT_HEADERS)/mm-audio/surround_sound_3mic/
+diff --git a/hal/audio_extn/ssr.c b/hal/audio_extn/ssr.c
+index 15eaaef..6294c47 100644
+--- a/hal/audio_extn/ssr.c
++++ b/hal/audio_extn/ssr.c
+@@ -36,7 +36,19 @@
+ #include "audio_extn.h"
+ #include "platform.h"
+ #include "platform_api.h"
++#ifndef _OSS
+ #include "surround_rec_interface.h"
++#else
++typedef struct {
++    const char *name;
++    char *(*get_param_fn)(void *h);
++} get_param_data_t;
++
++typedef struct {
++    const char *name;
++    void (*set_param_fn)(void *h, const char *val);
++} set_param_data_t;
++#endif
+ 
+ #ifdef DYNAMIC_LOG_ENABLED
+ #include <log_xml_parser.h>
+-- 
+2.17.1
+
