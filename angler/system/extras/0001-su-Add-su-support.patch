@@ -1,7 +1,7 @@
-From 3de52b7ebdfbec1106e44bcd35f707fdd06c54ef Mon Sep 17 00:00:00 2001
+From f3f11e79ed75bb56874303e4d6277c3dcd60da4b Mon Sep 17 00:00:00 2001
 From: Satish Patel <tosatishpatel@gmail.com>
 Date: Fri, 7 Dec 2018 09:33:48 +0530
-Subject: [PATCH] [su]: Add su support
+Subject: [PATCH] Add su support
 
 su now can be controlled using developer options
 
@@ -10,24 +10,23 @@ Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
 ---
  su/.clang-format             |  11 +
  su/.gitignore                |   9 +
- su/Android.mk                |  25 +-
+ su/Android.mk                |  24 +-
  su/LICENSE                   |  13 +
  su/MODULE_LICENSE_APACHE2    |   0
- su/NOTICE                    | 190 -------------
- su/binder/appops-wrapper.cpp |  33 +++
- su/binder/pm-wrapper.c       |  52 ++++
+ su/NOTICE                    | 190 -----------
+ su/binder/appops-wrapper.cpp |  33 ++
+ su/binder/pm-wrapper.c       |  52 +++
  su/binder/pm-wrapper.h       |   6 +
- su/daemon.c                  | 631 +++++++++++++++++++++++++++++++++++++++++++
+ su/daemon.c                  | 631 +++++++++++++++++++++++++++++++++++
  su/policy                    | Bin 0 -> 411698 bytes
- su/pts.c                     | 334 +++++++++++++++++++++++
- su/pts.h                     | 116 ++++++++
- su/su.c                      | 519 +++++++++++++++++++++++++++++++++++
- su/su.cpp                    | 144 ----------
- su/su.h                      | 115 ++++++++
- su/superuser.rc              |  18 ++
- su/utils.c                   |  54 ++++
+ su/pts.c                     | 334 ++++++++++++++++++
+ su/pts.h                     | 116 +++++++
+ su/su.c                      | 519 ++++++++++++++++++++++++++++
+ su/su.h                      | 115 +++++++
+ su/superuser.rc              |  18 +
+ su/utils.c                   |  54 +++
  su/utils.h                   |  27 ++
- 19 files changed, 1957 insertions(+), 340 deletions(-)
+ 18 files changed, 1957 insertions(+), 195 deletions(-)
  create mode 100644 su/.clang-format
  create mode 100644 su/.gitignore
  create mode 100644 su/LICENSE
@@ -41,7 +40,6 @@ Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
  create mode 100644 su/pts.c
  create mode 100644 su/pts.h
  create mode 100644 su/su.c
- delete mode 100644 su/su.cpp
  create mode 100644 su/su.h
  create mode 100644 su/superuser.rc
  create mode 100644 su/utils.c
@@ -80,10 +78,10 @@ index 0000000..8fbf940
 +.settings
 +libs
 diff --git a/su/Android.mk b/su/Android.mk
-index 92ad5e3..20cc1fb 100644
+index e3da4f2..20cc1fb 100644
 --- a/su/Android.mk
 +++ b/su/Android.mk
-@@ -1,13 +1,26 @@
+@@ -1,12 +1,26 @@
 -LOCAL_PATH:= $(call my-dir)
 +# Root AOSP source makefile
 +# su is built here, and 
@@ -110,7 +108,6 @@ index 92ad5e3..20cc1fb 100644
 +LOCAL_INIT_RC := superuser.rc
  
 -LOCAL_MODULE_PATH := $(TARGET_OUT_OPTIONAL_EXECUTABLES)
--LOCAL_MODULE_TAGS := debug
 +LOCAL_TIDY_FLAGS := -warnings-as-errors=clang-analyzer-security*,cert-*
 +LOCAL_TIDY_CHECKS := -*,clang-analyzer-security*,cert-*
 +LOCAL_TIDY := true
@@ -4379,156 +4376,6 @@ index 0000000..368fe85
 +    ALOGE("Allow chain exhausted, denying request");
 +    deny(&ctx);
 +}
-diff --git a/su/su.cpp b/su/su.cpp
-deleted file mode 100644
-index f3e4ff0..0000000
---- a/su/su.cpp
-+++ /dev/null
-@@ -1,144 +0,0 @@
--/*
-- * Copyright (C) 2008 The Android Open Source Project
-- *
-- * Licensed under the Apache License, Version 2.0 (the "License");
-- * you may not use this file except in compliance with the License.
-- * You may obtain a copy of the License at
-- *
-- *     http://www.apache.org/licenses/LICENSE-2.0
-- *
-- * Unless required by applicable law or agreed to in writing, software
-- * distributed under the License is distributed on an "AS IS" BASIS,
-- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-- * See the License for the specific language governing permissions and
-- * limitations under the License.
-- */
--
--#include <errno.h>
--#include <error.h>
--#include <getopt.h>
--#include <paths.h>
--#include <pwd.h>
--#include <stdio.h>
--#include <stdlib.h>
--#include <string.h>
--#include <unistd.h>
--
--#include <private/android_filesystem_config.h>
--
--void pwtoid(const char* tok, uid_t* uid, gid_t* gid) {
--    struct passwd* pw = getpwnam(tok);
--    if (pw) {
--        if (uid) *uid = pw->pw_uid;
--        if (gid) *gid = pw->pw_gid;
--    } else {
--        char* end;
--        errno = 0;
--        uid_t tmpid = strtoul(tok, &end, 10);
--        if (errno != 0 || end == tok) error(1, errno, "invalid uid/gid '%s'", tok);
--        if (uid) *uid = tmpid;
--        if (gid) *gid = tmpid;
--    }
--}
--
--void extract_uidgids(const char* uidgids, uid_t* uid, gid_t* gid, gid_t* gids, int* gids_count) {
--    char *clobberablegids;
--    char *nexttok;
--    char *tok;
--    int gids_found;
--
--    if (!uidgids || !*uidgids) {
--        *gid = *uid = 0;
--        *gids_count = 0;
--        return;
--    }
--
--    clobberablegids = strdup(uidgids);
--    strcpy(clobberablegids, uidgids);
--    nexttok = clobberablegids;
--    tok = strsep(&nexttok, ",");
--    pwtoid(tok, uid, gid);
--    tok = strsep(&nexttok, ",");
--    if (!tok) {
--        /* gid is already set above */
--        *gids_count = 0;
--        free(clobberablegids);
--        return;
--    }
--    pwtoid(tok, NULL, gid);
--    gids_found = 0;
--    while ((gids_found < *gids_count) && (tok = strsep(&nexttok, ","))) {
--        pwtoid(tok, NULL, gids);
--        gids_found++;
--        gids++;
--    }
--    if (nexttok && gids_found == *gids_count) {
--        fprintf(stderr, "too many group ids\n");
--    }
--    *gids_count = gids_found;
--    free(clobberablegids);
--}
--
--int main(int argc, char** argv) {
--    uid_t current_uid = getuid();
--    if (current_uid != AID_ROOT && current_uid != AID_SHELL) error(1, 0, "not allowed");
--
--    // Handle -h and --help.
--    ++argv;
--    if (*argv && (strcmp(*argv, "--help") == 0 || strcmp(*argv, "-h") == 0)) {
--        fprintf(stderr,
--                "usage: su [UID[,GID[,GID2]...]] [COMMAND [ARG...]]\n"
--                "\n"
--                "Switch to WHO (default 'root') and run the given command (default sh).\n"
--                "\n"
--                "where WHO is a comma-separated list of user, group,\n"
--                "and supplementary groups in that order.\n"
--                "\n");
--        return 0;
--    }
--
--    // The default user is root.
--    uid_t uid = 0;
--    gid_t gid = 0;
--
--    // If there are any arguments, the first argument is the uid/gid/supplementary groups.
--    if (*argv) {
--        gid_t gids[10];
--        int gids_count = sizeof(gids)/sizeof(gids[0]);
--        extract_uidgids(*argv, &uid, &gid, gids, &gids_count);
--        if (gids_count) {
--            if (setgroups(gids_count, gids)) {
--                error(1, errno, "setgroups failed");
--            }
--        }
--        ++argv;
--    }
--
--    if (setgid(gid)) error(1, errno, "setgid failed");
--    if (setuid(uid)) error(1, errno, "setuid failed");
--
--    // Reset parts of the environment.
--    setenv("PATH", _PATH_DEFPATH, 1);
--    unsetenv("IFS");
--    struct passwd* pw = getpwuid(uid);
--    if (pw) {
--        setenv("LOGNAME", pw->pw_name, 1);
--        setenv("USER", pw->pw_name, 1);
--    } else {
--        unsetenv("LOGNAME");
--        unsetenv("USER");
--    }
--
--    // Set up the arguments for exec.
--    char* exec_args[argc + 1];  // Having too much space is fine.
--    size_t i = 0;
--    for (; *argv != NULL; ++i) {
--      exec_args[i] = *argv++;
--    }
--    // Default to the standard shell.
--    if (i == 0) exec_args[i++] = const_cast<char*>("/system/bin/sh");
--    exec_args[i] = NULL;
--
--    execvp(exec_args[0], exec_args);
--    error(1, errno, "failed to exec %s", exec_args[0]);
--}
 diff --git a/su/su.h b/su/su.h
 new file mode 100644
 index 0000000..6b91bc8
@@ -4768,5 +4615,5 @@ index 0000000..ed4a5ef
 +
 +#endif
 -- 
-2.7.4
+2.17.1
 

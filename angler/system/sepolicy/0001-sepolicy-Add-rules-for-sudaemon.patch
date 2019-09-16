@@ -1,4 +1,4 @@
-From fd6bc76ad49875ad5698e6929e59713430311afa Mon Sep 17 00:00:00 2001
+From 2b8c513bf3b462ea8b06f0c933b4379c7ca691b7 Mon Sep 17 00:00:00 2001
 From: Demon Singur <demonsingur@gmail.com>
 Date: Thu, 23 Aug 2018 03:55:12 +0000
 Subject: [PATCH 1/2] sepolicy: Add rules for sudaemon
@@ -50,42 +50,16 @@ Date:   Fri Oct 16 20:05:10 2015 -0700
 Change-Id: I91cd6166e2f312c9bc6c9079d439cd2579aa3956
 Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
 ---
- private/compat/26.0/26.0.ignore.cil | 1 +
- private/compat/27.0/27.0.ignore.cil | 1 +
- public/domain.te                    | 8 +++++---
- public/su.te                        | 1 +
- 4 files changed, 8 insertions(+), 3 deletions(-)
+ public/domain.te | 11 ++++++-----
+ public/su.te     |  2 +-
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/private/compat/26.0/26.0.ignore.cil b/private/compat/26.0/26.0.ignore.cil
-index 4e0aae2..0144cfd 100644
---- a/private/compat/26.0/26.0.ignore.cil
-+++ b/private/compat/26.0/26.0.ignore.cil
-@@ -101,6 +101,7 @@
-     statsdw_socket
-     statscompanion_service
-     storaged_data_file
-+    sudaemon
-     sysfs_fs_ext4_features
-     system_boot_reason_prop
-     system_net_netd_hwservice
-diff --git a/private/compat/27.0/27.0.ignore.cil b/private/compat/27.0/27.0.ignore.cil
-index 747478c..3ecb236 100644
---- a/private/compat/27.0/27.0.ignore.cil
-+++ b/private/compat/27.0/27.0.ignore.cil
-@@ -88,6 +88,7 @@
-     statsdw
-     statsdw_socket
-     storaged_data_file
-+    sudaemon
-     system_boot_reason_prop
-     system_update_service
-     test_boot_reason_prop
 diff --git a/public/domain.te b/public/domain.te
-index e9337b6..8d54dba 100644
+index 987bb9f..db59afc 100644
 --- a/public/domain.te
 +++ b/public/domain.te
-@@ -497,7 +497,7 @@ neverallow * exec_type:dir_file_class_set mounton;
- neverallow { domain -init } { system_file vendor_file_type }:dir_file_class_set mounton;
+@@ -488,7 +488,7 @@ neverallow * exec_type:dir_file_class_set mounton;
+ neverallow { domain -init } { system_file_type vendor_file_type }:dir_file_class_set mounton;
  
  # Nothing should be writing to files in the rootfs.
 -neverallow * rootfs:file { create write setattr relabelto append unlink link rename };
@@ -93,7 +67,7 @@ index e9337b6..8d54dba 100644
  
  # Restrict context mounts to specific types marked with
  # the contextmount_type attribute.
-@@ -789,6 +789,8 @@ full_treble_only(`
+@@ -796,6 +796,8 @@ full_treble_only(`
      -init
      -ueventd
      -socket_between_core_and_vendor_violators
@@ -102,7 +76,7 @@ index e9337b6..8d54dba 100644
    } {
      file_type
      dev_type
-@@ -1109,7 +1111,7 @@ neverallow * { file_type fs_type dev_type }:{ lnk_file fifo_file sock_file } mou
+@@ -1108,7 +1110,7 @@ neverallow * { file_type fs_type dev_type }:{ lnk_file fifo_file sock_file } mou
  # Nobody should be able to execute su on user builds.
  # On userdebug/eng builds, only dumpstate, shell, and
  # su itself execute su.
@@ -111,27 +85,31 @@ index e9337b6..8d54dba 100644
  
  # Do not allow the introduction of new execmod rules. Text relocations
  # and modification of executable pages are unsafe.
-@@ -1203,7 +1205,7 @@ neverallow {
+@@ -1192,9 +1194,8 @@ neverallow {
+   -zygote
+ } shell:process { transition dyntransition };
  
- # Only domains spawned from zygote and runas may have the appdomain attribute.
- neverallow { domain -runas -webview_zygote -zygote } {
--  appdomain -shell userdebug_or_eng(`-su')
-+  appdomain -shell userdebug_or_eng(`-su -sudaemon')
+-# Only domains spawned from zygote, runas and simpleperf_app_runner may have the appdomain
+-# attribute.
+-neverallow { domain -simpleperf_app_runner -runas -app_zygote -webview_zygote -zygote } {
++# Only domains spawned from zygote and runas may have the appdomain attribute.
++neverallow { domain -runas -webview_zygote -zygote } {
+   appdomain -shell userdebug_or_eng(`-su')
  }:process { transition dyntransition };
  
- # Minimize read access to shell- or app-writable symlinks.
 diff --git a/public/su.te b/public/su.te
-index 0312945..b43c1ec 100644
+index a2f435e..a6b7b4a 100644
 --- a/public/su.te
 +++ b/public/su.te
-@@ -4,6 +4,7 @@ type su, domain;
+@@ -3,7 +3,7 @@
+ type su, domain;
  
  # File types must be defined for file_contexts.
- type su_exec, exec_type, file_type;
-+type sudaemon, domain;
+-type su_exec, system_file_type, exec_type, file_type;
++type su_exec, exec_type, file_type;
  
  userdebug_or_eng(`
    # Domain used for su processes, as well as for adbd and adb shell
 -- 
-2.7.4
+2.17.1
 

@@ -1,4 +1,4 @@
-From 03484f632fbb5107e972cc790870fe1a53d39b3c Mon Sep 17 00:00:00 2001
+From 9555159854ef0283b02fdce73df1333ea5f4c33d Mon Sep 17 00:00:00 2001
 From: Purushottam Kushwaha <pkushwah@codeaurora.org>
 Date: Thu, 7 Jun 2018 23:21:36 +0530
 Subject: [PATCH 1/2] Add wifi_add_or_remove_virtual_intf() to the legacy wifi
@@ -15,13 +15,13 @@ Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
  1 file changed, 3 insertions(+)
 
 diff --git a/include/hardware_legacy/wifi_hal.h b/include/hardware_legacy/wifi_hal.h
-index cdf6b48..71f7a3e 100644
+index 059bb09..b39893f 100644
 --- a/include/hardware_legacy/wifi_hal.h
 +++ b/include/hardware_legacy/wifi_hal.h
-@@ -464,6 +464,9 @@ typedef struct {
-                                          wifi_roaming_config *roaming_config);
-     wifi_error (*wifi_set_radio_mode_change_handler)(wifi_request_id id, wifi_interface_handle
+@@ -478,6 +478,9 @@ typedef struct {
                          iface, wifi_radio_mode_change_handler eh);
+     wifi_error (*wifi_set_latency_mode)(wifi_interface_handle iface,
+                                         wifi_latency_mode mode);
 +    wifi_error (*wifi_add_or_remove_virtual_intf)(wifi_interface_handle iface,
 +                                                  const char* ifname, u32 iface_type,
 +                                                  bool create);
