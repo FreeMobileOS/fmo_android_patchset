@@ -1,0 +1,25 @@
+From db915faf29027edb3ec3ef16d9a5b31089f64d45 Mon Sep 17 00:00:00 2001
+From: Satish Patel <tosatishpatel@gmail.com>
+Date: Wed, 6 Nov 2019 07:37:43 +0530
+Subject: [PATCH] Fix build error : Android 10
+
+Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
+---
+ Android.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/Android.mk b/Android.mk
+index 270a90b..2cc8611 100644
+--- a/Android.mk
++++ b/Android.mk
+@@ -28,7 +28,6 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH) \
+ 		$(LOCAL_PATH)/include \
+ 		$(LOCAL_PATH)/ncurses \
+ 
+-LOCAL_MODULE_TAGS := eng
+ LOCAL_MODULE := libncurses
+ 
+ include $(BUILD_SHARED_LIBRARY)
+-- 
+2.17.1
+
