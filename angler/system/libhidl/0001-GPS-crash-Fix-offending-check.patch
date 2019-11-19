@@ -1,0 +1,32 @@
+From 24375ae7be6203e2694cbc917509b72d06c41d38 Mon Sep 17 00:00:00 2001
+From: Satish Patel <tosatishpatel@gmail.com>
+Date: Tue, 19 Nov 2019 14:35:29 +0530
+Subject: [PATCH] GPS crash Fix: offending check
+
+It doesn't exist in the older code base: android 9
+
+Fix has been applied to hardware/qcom/gps. This is more of preventive
+side
+
+Change-Id: I3f3c038c7160e24b7265fbdae885b1593510929d
+Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
+---
+ base/HidlSupport.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/base/HidlSupport.cpp b/base/HidlSupport.cpp
+index f97f216..9f1e80e 100644
+--- a/base/HidlSupport.cpp
++++ b/base/HidlSupport.cpp
+@@ -262,7 +262,7 @@ void hidl_string::setToExternal(const char *data, size_t size) {
+     // directly into the read-only binder buffer. If we manually copy the
+     // data now to add a zero, then we lose the efficiency of this method.
+     // Checking here (it's also checked in the parceling code later).
+-    CHECK(data[size] == '\0');
++    //CHECK(data[size] == '\0');
+ 
+     clear();
+ 
+-- 
+2.17.1
+

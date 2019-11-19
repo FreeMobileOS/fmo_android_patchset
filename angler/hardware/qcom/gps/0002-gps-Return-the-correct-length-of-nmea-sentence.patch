@@ -1,0 +1,42 @@
+From 27fbf5b508e670d804faa831353fe33669980239 Mon Sep 17 00:00:00 2001
+From: Satish Patel <tosatishpatel@gmail.com>
+Date: Tue, 19 Nov 2019 13:40:46 +0530
+Subject: [PATCH 2/2] gps: Return the correct length of nmea sentence
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Return the correct length of nmea sentence in the function loc_eng_nmea_put_checksum().
+The correct length is length of NMEA string including ‘$’ character alongwith
+length of checksum.
+
+https://github.com/z3c-pie/device_sony_msm8974-common/commit/74894e7a402906920a5a92e50bd61db0984bec04
+
+Change-Id: Iaa06e1f7c72a5bbf6514079d8a58f8bc2f240fc8
+Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
+---
+ msm8994/loc_api/libloc_api_50001/loc_eng_nmea.cpp | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/msm8994/loc_api/libloc_api_50001/loc_eng_nmea.cpp b/msm8994/loc_api/libloc_api_50001/loc_eng_nmea.cpp
+index 4c6b9a3..62f9e17 100644
+--- a/msm8994/loc_api/libloc_api_50001/loc_eng_nmea.cpp
++++ b/msm8994/loc_api/libloc_api_50001/loc_eng_nmea.cpp
+@@ -92,9 +92,12 @@ int loc_eng_nmea_put_checksum(char *pNmea, int maxSize)
+         checksum ^= *pNmea++;
+         length++;
+     }
+-
++    // length now contains nmea sentence string length not including $ sign.
+     int checksumLength = snprintf(pNmea,(maxSize-length-1),"*%02X\r\n", checksum);
+-    return (length + checksumLength);
++
++    // total length of nmea sentence is length of nmea sentence inc $ sign plus
++    // length of checksum (+1 is to cover the $ character in the length).
++    return (length + checksumLength + 1);
+ }
+ 
+ /*===========================================================================
+-- 
+2.17.1
+

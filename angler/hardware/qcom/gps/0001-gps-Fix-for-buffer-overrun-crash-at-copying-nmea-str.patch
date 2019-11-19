@@ -1,0 +1,33 @@
+From f2d44d0a2ccbc495a5b7ea546cbea7a1a3809ae0 Mon Sep 17 00:00:00 2001
+From: Satish Patel <tosatishpatel@gmail.com>
+Date: Tue, 19 Nov 2019 13:35:21 +0530
+Subject: [PATCH 1/2] gps: Fix for buffer overrun crash at copying nmea string
+
+Add zero clearing of allocated nmea buffer to ensure
+the nmea string is null terminated.
+
+Ported manually from# (msm8974 based patch)
+https://github.com/z3c-pie/device_sony_msm8974-common/commit/2dade5710c4542031c4bcef4202a7752dff65d89
+
+Change-Id: I1bb5b7907a0da3e914e763b1305426717b201de7
+Signed-off-by: Satish Patel <tosatishpatel@gmail.com>
+---
+ msm8994/loc_api/libloc_api_50001/loc_eng.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/msm8994/loc_api/libloc_api_50001/loc_eng.cpp b/msm8994/loc_api/libloc_api_50001/loc_eng.cpp
+index d5f73c2..0f7309a 100644
+--- a/msm8994/loc_api/libloc_api_50001/loc_eng.cpp
++++ b/msm8994/loc_api/libloc_api_50001/loc_eng.cpp
+@@ -892,7 +892,7 @@ LocEngReportNmea::LocEngReportNmea(void* locEng,
+                                    const char* data, int len) :
+     LocMsg(), mLocEng(locEng), mNmea(new char[len]), mLen(len)
+ {
+-    memcpy((void*)mNmea, (void*)data, len);
++    strlcpy(mNmea, data, len+1);
+     locallog();
+ }
+ void LocEngReportNmea::proc() const {
+-- 
+2.17.1
+
