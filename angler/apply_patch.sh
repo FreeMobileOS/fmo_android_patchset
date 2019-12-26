@@ -2,13 +2,19 @@
 MYDIR="$(realpath $(dirname $(echo ${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]})))"
 
 echo $MYDIR
+cd "$MYDIR"
 
 # Set AOSP Path
 if [ -z "$AOSP_SRC_PATH" ]; then
-	echo "Enter AOSP src path:"
-	read srcpath
-	AOSP_SRC_PATH=$srcpath
-	export AOSP_SRC_PATH=$AOSP_SRC_PATH
+	# Try the location that will be right if the script was checked
+	# out through the repo tool...
+	[ -d "../../.repo" -a -d "../../bionic" ] && AOSP_SRC_PATH="$(realpath ../..)"
+	if [ -z "$AOSP_SRC_PATH" ]; then
+		echo "Enter AOSP src path:"
+		read srcpath
+		AOSP_SRC_PATH=$srcpath
+		export AOSP_SRC_PATH=$AOSP_SRC_PATH
+	fi
 fi
 
 echo "AOSP Source: $AOSP_SRC_PATH"
