@@ -1,0 +1,31 @@
+From 3e04497415f928ebf4b3a2b5827a610be1e9bd1d Mon Sep 17 00:00:00 2001
+From: satish <tosatishpatel@gmail.com>
+Date: Sat, 1 Feb 2020 13:20:16 +0530
+Subject: [PATCH] Remove lineage dependency
+
+Signed-off-by: satish <tosatishpatel@gmail.com>
+---
+ cryptfshw/1.0/qsee/Android.bp | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/cryptfshw/1.0/qsee/Android.bp b/cryptfshw/1.0/qsee/Android.bp
+index b06e286..8258315 100644
+--- a/cryptfshw/1.0/qsee/Android.bp
++++ b/cryptfshw/1.0/qsee/Android.bp
+@@ -31,13 +31,6 @@ cc_binary {
+             cflags: ["-DARCH_ARM_32"],
+         },
+     },
+-    product_variables: {
+-        lineage: {
+-            should_wait_for_qsee: {
+-                cflags: ["-DWAIT_FOR_QSEE"],
+-            },
+-        },
+-    },
+     header_libs: ["generated_kernel_headers"],
+     shared_libs: [
+         "libbase",
+-- 
+2.7.4
+
